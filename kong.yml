@@ -1,11 +1,3 @@
-# ------------------------------------------------------------------------------
-# This is an example file to get you started with using
-# declarative configuration in Kong.
-# ------------------------------------------------------------------------------
-
-# Metadata fields start with an underscore (_)
-# Fields that do not start with an underscore represent Kong entities and attributes
-
 # _format_version is mandatory,
 # it specifies the minimum version of Kong that supports the format
 
@@ -21,23 +13,7 @@ _format_version: "2.1"
 _transform: true
 
 # Each Kong entity (core entity or custom entity introduced by a plugin)
-# can be listed in the top-level as an array of objects:
-
-# services:
-# - name: example-service
-#   url: http://example.com
-#   # Entities can store tags as metadata
-#   tags:
-#   - example
-#   # Entities that have a foreign-key relationship can be nested:
-#   routes:
-#   - name: example-route
-#     paths:
-#     - /
-#   plugins:
-#   - name: key-auth
-# - name: another-service
-#   url: https://example.org
+# can be listed in the top-level as an array of objects
 
 
 services:
@@ -57,40 +33,38 @@ services:
         paths:
           - /v1/ping_google
 
-# routes:
-# - name: another-route
-#   # Relationships can also be specified between top-level entities,
-#   # either by name or by id
-#   service: example-service
-#   hosts: ["hello.com"]
+plugins:
+  - name: rate-limiting
+    # service: hello-service
+    # if "service" is not defined, the plugin applies to all services.
+    # if service IS defined, then it only applies to the service that matches this name
+    config:
+      minute: 5 # 5 requests per minute
+      policy: local
 
-# consumers:
-# - username: example-user
-#   # Custom entities from plugin can also be specified
-#   # If they specify a foreign-key relationshp, they can also be nested
-#   keyauth_credentials:
-#   - key: my-key
-#   plugins:
-#   - name: rate-limiting
-#     _comment: "these are default rate-limits for user example-user"
-#     config:
-#       policy: local
-#       second: 5
-#       hour: 10000
+# headers returned by the rate limiting above:
+# X-RateLimit-Remaining-Minute: 2
+# X-RateLimit-Limit-Minute: 5
+# RateLimit-Remaining: 2
+# RateLimit-Limit: 5
+# RateLimit-Reset: 19
+#
+# When we exceed the limit:
+# 429 Too Many Requests
+# RateLimit-RetryAfter: 19 <- only when we exceed the the limit
 
-# When an entity has multiple foreign-key relationships
-# (e.g. a plugin matching on both consumer and service)
-# it must be specified as a top-level entity, and not through
-# nesting.
-
-# plugins:
-# - name: rate-limiting
-#   consumer: example-user
-#   service: another-service
-#   _comment: "example-user is extra limited when using another-service"
-#   config:
-#     hour: 2
-#   # tags are for your organization only and have no meaning for Kong:
+# services:
+# - name: example-service
+#   url: http://example.com
+#   # Entities can store tags as metadata
 #   tags:
-#   - extra_limits
-#   - my_tag
+#   - example
+#   # Entities that have a foreign-key relationship can be nested:
+#   routes:
+#   - name: example-route
+#     paths:
+#     - /
+#   plugins:
+#   - name: key-auth
+# - name: another-service
+#   url: https://example.org
