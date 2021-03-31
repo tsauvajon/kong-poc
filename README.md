@@ -7,6 +7,18 @@ $ curl http://127.0.0.1:8000/v1/say_hello
 $ curl http://127.0.0.1:8000/v1/ping_google
 ```
 
+## General thoughts
+
+Pros:
+- super easy to get started, to configure
+- documentation is quite good (although it's sometimes not too easy to find things)\
+- performance is good
+
+Cons:
+- Declarative configuration looks like the option we want to use (it works similarly as everything else we have and avoids state) but seems to be [lacking options](https://docs.konghq.com/gateway-oss/2.3.x/db-less-and-declarative-config/#partial-compatibility) the DB mode has. Maybe we can use DB and inject config at startup if that proves an issue?
+- We don't use it in Beat yet
+- It might need Postgres and/or Redis to be fully functional and optimal
+
 ## Modes
 
 Kong can run with two modes:
@@ -33,18 +45,6 @@ When this option is chosen, Kong is still mostly stateless, although you can sti
 
 Note that Kong only loads `kong.yaml` once at startup, any changes to the configuration require either a reboot,
 or use the CLI tool to run `deck sync` (see [decK](https://github.com/Kong/deck))
-
-## General thoughts
-
-Pros:
-- super easy to get started, to configure
-- documentation is quite good (although it's sometimes not too easy to find things)\
-- performance is good
-
-Cons:
-- Declarative configuration looks like the option we want to use (it works similarly as everything else we have and avoids state) but seems to be [lacking options](https://docs.konghq.com/gateway-oss/2.3.x/db-less-and-declarative-config/#partial-compatibility) the DB mode has. Maybe we can use DB and inject config at startup if that proves an issue?
-- We don't use it in Beat yet
-- It might need Postgres and/or Redis to be fully functional and optimal
 
 ## Latency
 
