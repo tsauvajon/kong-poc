@@ -1,0 +1,13 @@
+_format_version: "2.1"
+
+services:
+  - name: hello
+    url: http://hello
+    routes:
+      - name: hello-route
+        paths: /v1/say_hello
+  - name: google
+    url: https://google.com
+    routes:
+      - name: google-route
+        paths: /v1/ping_google
