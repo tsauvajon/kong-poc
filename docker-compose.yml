@@ -7,7 +7,7 @@ services:
       - application-network
 
   kong:
-    image: "${KONG_DOCKER_TAG:-kong:2.3.3-ubuntu}"
+    image: "${KONG_DOCKER_TAG:-kong:2.3.3-alpine}"
     user: "${KONG_USER:-kong}"
     environment:
       KONG_ADMIN_ACCESS_LOG: /dev/stdout

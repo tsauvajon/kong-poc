@@ -19,6 +19,9 @@ _transform: true
 services:
   - name: hello-service
     url: http://hello:8080
+    connect_timeout: 10000 # nginx option
+    read_timeout: 10000
+    write_timeout: 10000
     routes:
       - name: hello-route 
         paths:
@@ -40,7 +43,7 @@ plugins:
     # if service IS defined, then it only applies to the service that matches this name
     config:
       minute: 5 # 5 requests per minute
-      policy: local
+      policy: local # store things in memory, maybe use `redis` mode for prod
 
 # headers returned by the rate limiting above:
 # X-RateLimit-Remaining-Minute: 2
